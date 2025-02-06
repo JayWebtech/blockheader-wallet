@@ -11,7 +11,7 @@ const Navbar = () => {
             <div className="flex justify-between items-center">
                 
                 <h1 className="text-2xl text-white">
-                    <span className='text-primary'>Veil</span> Assets
+                    <span className='text-primary'>Block</span>Header
                 </h1>
                 <button 
                     className="md:hidden text-white"
