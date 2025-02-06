@@ -1,9 +1,9 @@
 import { HDNodeWallet } from "ethers";
 
 export async function POST(req, res) {
-    const { data } = await req.json();
+    const { data,index } = await req.json();
   try {
-    const path = `m/44'/60'/0'/0/0`;
+    const path = `m/44'/60'/0'/0/${index}`;
 
     const wallet_account = HDNodeWallet.fromPhrase(data, "", path);
 

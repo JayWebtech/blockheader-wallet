@@ -8,7 +8,7 @@ import Modal from "../../components/Modal";
 
 function Account() {
   const [accounts, setAccounts] = useState([]);
-  const [isOpen, setOpen] = useState(false)
+  const [isOpen, setOpen] = useState(false);
 
   useEffect(() => {
     const savedAccounts = sessionStorage.getItem("accounts");
@@ -19,25 +19,31 @@ function Account() {
 
   const createAccount = async () => {
     const mnemonicPhrase = sessionStorage.getItem("mnemonicPhrase");
-
+  
     if (!mnemonicPhrase) {
       toast.error("Mnemonic phrase is missing.");
       return;
     }
-
+  
+    const existingAccounts = JSON.parse(sessionStorage.getItem("accounts")) || [];
+  
+    const nextIndex = existingAccounts.length > 0 ? existingAccounts[existingAccounts.length - 1].index + 1 : 0;
+  
     try {
       const response = await fetch("http://localhost:3000/api/create-account", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: mnemonicPhrase }),
+        body: JSON.stringify({ data: mnemonicPhrase, index: nextIndex }),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
-
-        const updatedAccounts = [...accounts, data];
+  
+        const newAccount = { ...data, index: nextIndex };
+  
+        const updatedAccounts = [...existingAccounts, newAccount];
         sessionStorage.setItem("accounts", JSON.stringify(updatedAccounts));
         setAccounts(updatedAccounts);
         toast.success("Account created successfully!");
@@ -48,6 +54,7 @@ function Account() {
       toast.error(`Error: ${error.message}`);
     }
   };
+  
 
   const shortenKey = (key) => {
     return `${key.slice(0, 4)}****${key.slice(-4)}`;
@@ -57,21 +64,11 @@ function Account() {
     navigator.clipboard.writeText(text);
     toast.success("Copied to clipboard!");
   };
-
-  const sendTransaction = async () => {
-    const response = await fetch("http://localhost:3000/api/transaction", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data: "mnemonicPhrase" }),
-      });
-
-  }
+  
 
   return (
     <div className="h-screen grid-background bg-gray-900">
-      {isOpen && <Modal accounts={accounts} />}
+      {isOpen && <Modal accounts={accounts} setOpen = {setOpen} shortenKey={shortenKey}/>}
       <div className="container mx-auto px-4 sm:px-10 md:px-8 lg:px-16">
         <AccountNav setOpen={setOpen} createAccount={createAccount} />
 
