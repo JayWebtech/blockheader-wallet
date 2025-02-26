@@ -4,10 +4,7 @@ export async function POST(req, res) {
   const { data } = await req.json();
   console.log(data)
   try {
-    const provider = new ethers.AlchemyProvider(
-      process.env.NEXT_PUBLIC_NETWORK,
-      process.env.NEXT_PUBLIC_ALCHEMY_KEY
-    );
+    const provider = new ethers.JsonRpcProvider("https://0417-129-222-206-107.ngrok-free.app/", "holesky");
 
     console.log(data);
 

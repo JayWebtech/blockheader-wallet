@@ -3,11 +3,7 @@ import { ethers, parseUnits } from "ethers";
 export async function POST(req, res) {
   const { data } = await req.json();
   try {
-    const provider = new ethers.AlchemyProvider(
-      process.env.NEXT_PUBLIC_NETWORK,
-      process.env.NEXT_PUBLIC_ALCHEMY_KEY
-      
-    );
+    const provider = new ethers.JsonRpcProvider("https://0417-129-222-206-107.ngrok-free.app/", "holesky");
 
     const signer = new ethers.Wallet(data?.privateKey).connect(provider);
     const tx = await signer.sendTransaction({
