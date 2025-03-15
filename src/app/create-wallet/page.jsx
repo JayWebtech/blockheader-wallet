@@ -2,7 +2,7 @@ import CreateWallet from "./createWallet";
 
 export default async function Page() {
     try {
-        const res = await fetch(`http://localhost:3000/api/wallet`);
+        const res = await fetch(`https://blockheader-wallet.vercel.app/api/wallet`);
         if (!res.ok) {
             throw new Error(`API error: ${res.status} ${res.statusText}`);
         }
